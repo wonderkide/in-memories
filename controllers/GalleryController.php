@@ -102,6 +102,7 @@ class GalleryController extends MyController
             }
             $this->updateRead($gallery);
         }
+        \Yii::$app->view->title = 'อัลบั้ม :: ' . $gallery->name;
         
         $imageModel = GalleryImagesModel::findAll(['ref' => $slug]);
         $user = UserModel::findOne($gallery->id_user);

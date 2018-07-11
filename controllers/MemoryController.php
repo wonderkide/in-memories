@@ -74,7 +74,7 @@ class MemoryController extends MyController
             ]);
         }
         $username = \app\models\UserModel::getName($model->id_user);
-        
+        \Yii::$app->view->title = $model->title;
         $comment = CommentModel::find()->where(['id_parent'=>0, 'id_cat'=>$model->id, 'category'=>'memory'])->orderBy(['create_time'=>SORT_ASC]);
         $count = $comment->count();
         // create a pagination object with the total count
