@@ -1,7 +1,7 @@
 <?php
 /**
  * @link https://github.com/2amigos/yii2-file-upload-widget
- * @copyright Copyright (c) 2013-2015 2amigOS! Consulting Group LLC
+ * @copyright Copyright (c) 2013-2017 2amigOS! Consulting Group LLC
  * @license http://opensource.org/licenses/BSD-3-Clause
  */
 
@@ -16,7 +16,7 @@ use yii\helpers\Url;
  *
  * Widget to render the jQuery File Upload Basic Uploader
  *
- * @author Alexander Kochetov <creocoder@gmail.com>
+ * @author Antonio Ramirez <hola@2amigos.us>
  */
 class FileUpload extends BaseUpload
 {
@@ -24,6 +24,11 @@ class FileUpload extends BaseUpload
      * @var bool whether to register the js files for the basic +
      */
     public $plus = false;
+
+    /**
+     * @var bool whether to render the default button
+     */
+    public $useDefaultButton = true;
 
     /**
      * @inheritdoc
@@ -45,7 +50,9 @@ class FileUpload extends BaseUpload
             ? Html::activeFileInput($this->model, $this->attribute, $this->options)
             : Html::fileInput($this->name, $this->value, $this->options);
 
-        echo $this->render('uploadButton', ['input' => $input]);
+        echo $this->useDefaultButton
+            ? $this->render('uploadButton', ['input' => $input])
+            : $input;
 
         $this->registerClientScript();
     }

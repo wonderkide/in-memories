@@ -247,4 +247,67 @@ class SiteController extends MyController
     public function actionPrivacypolicy() {
         return $this->render('privacy_policy');
     }
+    
+    public function actionFblogin() {
+        $user = Yii::$app->facebook->fb_user_data();
+        if (isset($user['id']) && isset($user['name'])) {
+            $id = $user['id'];
+            $name = $user['name'];
+            $email = isset($user['email']) ? $user['email'] : $id . '@fbaccount.com';
+            
+            if($this->check_fb_login($id)){
+                return $this->goBack();
+            }
+            else{
+                if($this->regist_fb_login($id, $name,$email)){
+                    if($this->check_fb_login($id)){
+                        return $this->goBack();
+                    }
+                }
+            }
+        }
+        throw new \yii\web\NotFoundHttpException('The requested error.');
+        
+    }
+    
+    protected function check_fb_login($id) {
+        $model = new LoginForm();
+        $model->username = $id;
+        $model->password = md5(sha1(base64_encode($id)));
+        $model->rememberMe = true;
+        if ($model->login()) {
+            return true;
+        }
+        return FALSE;
+    }
+    
+    protected function regist_fb_login($id, $name, $email=null) {
+        $model = new \app\models\FacebookSignup();
+        $model->username = $id;
+        $model->email = $email;
+        $model->nickname = $name;
+        $model->image = $this->get_fb_profile_img($id);
+        $model->password = md5(sha1(base64_encode($id)));
+        $model->re_password = md5(sha1(base64_encode($id)));
+
+        if($model->signup()){
+            return true;
+        }
+        return FALSE;
+        
+    }
+    
+    protected function get_fb_profile_img($id) {
+        
+        $url = 'http://graph.facebook.com/'.$id.'/picture?type=large';
+        $data = file_get_contents($url);
+        $path = '/uploads/img/profile/';
+        $name = date('Ymd-his') . '-' . $id . '.jpg';
+        $fileName = $path . $name;
+        $file = fopen(Yii::$app->basePath .'/web'.$fileName, 'w+');
+        fputs($file, $data);
+        fclose($file);
+        
+        return $fileName;
+    }
 }

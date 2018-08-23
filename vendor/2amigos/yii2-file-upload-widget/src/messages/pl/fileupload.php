@@ -21,9 +21,10 @@ return [
     'Add files' => 'Dodaj pliki',
     'Start upload' => 'Wyślij',
     'Cancel upload' => 'Anuluj wysyłanie',
-    'Start' => '',
+    'Start' => 'Start',
     'Cancel' => 'Anuluj',
-    'Error' => 'Bład',
+    'Error' => 'Błąd',
     'Delete' => 'Usuń',
     'Processing' => 'Przetwarzanie',
+    'Select file...' => 'Wybierz plik...',
 ];

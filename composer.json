@@ -31,7 +31,9 @@
         "php-ffmpeg/php-ffmpeg": "~0.5",
         "kartik-v/yii2-grid": "@dev",
         "kartik-v/yii2-mpdf": "*",
-        "kittinan/thailandpost-track": "^1.0"
+        "kittinan/thailandpost-track": "^1.0",
+        "facebook/graph-sdk": "^5.6",
+        "wbraganca/yii2-videojs-widget": "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -336,15 +336,6 @@ return array (
       '@dosamigos/gallery' => $vendorDir . '/2amigos/yii2-gallery-widget/src',
     ),
   ),
-  '2amigos/yii2-file-upload-widget' => 
-  array (
-    'name' => '2amigos/yii2-file-upload-widget',
-    'version' => '1.0.4.0',
-    'alias' => 
-    array (
-      '@dosamigos/fileupload' => $vendorDir . '/2amigos/yii2-file-upload-widget/src',
-    ),
-  ),
   'yurkinx/yii2-image' => 
   array (
     'name' => 'yurkinx/yii2-image',
@@ -433,6 +424,24 @@ return array (
     'alias' => 
     array (
       '@kartik/field' => $vendorDir . '/kartik-v/yii2-field-range',
+    ),
+  ),
+  'wbraganca/yii2-videojs-widget' => 
+  array (
+    'name' => 'wbraganca/yii2-videojs-widget',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@wbraganca' => $vendorDir . '/wbraganca/yii2-videojs-widget',
+    ),
+  ),
+  '2amigos/yii2-file-upload-widget' => 
+  array (
+    'name' => '2amigos/yii2-file-upload-widget',
+    'version' => '1.0.8.0',
+    'alias' => 
+    array (
+      '@dosamigos/fileupload' => $vendorDir . '/2amigos/yii2-file-upload-widget/src',
     ),
   ),
 );

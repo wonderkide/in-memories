@@ -103,4 +103,5 @@ return [
         'finish' => '10',
         'clear' => '20',
     ],
+    'defaultEXP' => 20,
 ];

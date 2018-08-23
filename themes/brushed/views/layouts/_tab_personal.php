@@ -11,6 +11,7 @@ use app\components\MyController;
                         <li class="<?= $active=='message'?'active':''?>"><a href="<?= Yii::$app->seo->getUrl('personal/inbox') ?>">ข้อความ</a></li>
                         <li class="<?= $active=='memory'?'active':''?>"><a href="<?= Yii::$app->seo->getUrl('memory/manage') ?>">MEmory</a></li>
                         <li class="<?= $active=='gallery'?'active':''?>"><a href="<?= Yii::$app->seo->getUrl('gallery/personal') ?>">Gallery</a></li>
+                        <li class="<?= $active=='video'?'active':''?>"><a href="<?= Yii::$app->seo->getUrl('video/manage') ?>">Video</a></li>
                         <?php if(MyController::checkPermissionRank('alert')){ ?>
                         <li class="<?= $active=='alert'?'active':''?>"><a href="<?= Yii::$app->seo->getUrl('alert') ?>">Alert</a></li>
                         <?php } ?>

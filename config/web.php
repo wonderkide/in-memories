@@ -69,6 +69,9 @@ $config = [
         'seo' => [  
             'class' => 'app\components\Seo',
         ],
+        'facebook' => [  
+            'class' => 'app\components\facebook\facebookAPI',
+        ],
     ],
     /*'as access' => [
         'class' => 'app\modules\admin\components\AccessControl',

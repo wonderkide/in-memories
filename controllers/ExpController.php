@@ -127,17 +127,22 @@ class ExpController extends Controller
         $status = SettingModel::findOne(['type'=>'exp_for_comment']);
         if($status->setting){
             $exp = \app\models\ExpModel::findOne(['category'=>$cat]);
+            
             $model = new LogExpModel();
             $model->id_user = $user;
             $model->id_admin = null;
             $model->id_cat = $id_cat;
             $model->category = $cat;
             $model->detail = $detail;
-            if($bonus){
-                $model->exp = $exp->exp_bonus;
-            }
-            else{
-                $model->exp = $exp->exp;
+            if(!$exp){
+                $model->exp = Yii::$app->params['defaultEXP'];
+            }else{
+                if($bonus){
+                    $model->exp = $exp->exp_bonus;
+                }
+                else{
+                    $model->exp = $exp->exp;
+                }
             }
             $model->create_time = date('Y-m-d');
             $model->active = 0;

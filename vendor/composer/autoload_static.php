@@ -9,6 +9,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
     public static $files = array (
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -23,6 +24,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
             'yii\\codeception\\' => 16,
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
+        ),
+        'w' => 
+        array (
+            'wbraganca\\' => 10,
         ),
         't' => 
         array (
@@ -116,6 +121,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'F' => 
         array (
             'Faker\\' => 6,
+            'Facebook\\' => 9,
         ),
         'D' => 
         array (
@@ -161,6 +167,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'wbraganca\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wbraganca/yii2-videojs-widget',
+        ),
         'tpmanc\\imagick\\' => 
         array (
             0 => __DIR__ . '/..' . '/tpmanc/yii2-imagick',
@@ -172,8 +182,8 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
         'mongosoft\\file\\' => 
         array (
@@ -378,6 +388,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
+        'Facebook\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

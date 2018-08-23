@@ -11,7 +11,14 @@ $this->registerJsFile(Yii::$app->assetManager->getPublishedUrl('@WDAsset').'/sig
 use yii\captcha\Captcha;
 use app\components\widgets\rules;
 ?>
-
+<style>
+    .fb-login-button span{
+        /*width: 200px !important;*/
+    }
+    .fb-login-button iframe{
+        /*width: 100px !important;*/
+    }
+</style>
 <div class="cd-user-modal"> <!-- this is the entire modal form, including the background -->
 		<div class="cd-user-modal-container"> <!-- this is the container wrapper -->
 			<ul class="cd-switcher">
@@ -42,6 +49,9 @@ use app\components\widgets\rules;
 					<p class="fieldset" id="signin-submit-block" load="<?= Yii::$app->assetManager->getPublishedUrl('@WDAsset') . "/sign-modal/img/please-wait.gif" ?>">
 						<input id="signin-submit-button" class="full-width" type="submit" value="Login">
 					</p>
+                                        <div class="fieldset text-center">
+                                            <?php Yii::$app->facebook->loginBTN(); ?>
+                                        </div>
 				</form>
 				
 				<p class="cd-form-bottom-message"><a href="#0">Forgot your password?</a></p>

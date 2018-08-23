@@ -13,7 +13,7 @@ Modal::begin([
 ]);
 ?>
 <!-- Modal -->
-<div class="text-center header"><label><?= Yii::$app->user->identity->username ?></label></div>    
+<div class="text-center header"><label><?= Yii::$app->user->identity->nickname ? Yii::$app->user->identity->nickname : Yii::$app->user->identity->username ?></label></div>
 <div class="modal-user-image">
     <?= Html::img(Yii::$app->user->identity->image_crop == '' ? Yii::$app->assetManager->getPublishedUrl('@WDAsset').'/images/df_profile.png':Yii::$app->user->identity->image_crop, ['class' => 'img-responsive']) ?>
 </div>
