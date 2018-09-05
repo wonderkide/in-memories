@@ -1,0 +1,56 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+/*div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}*/
+.cd-user-modal ul,.cd-user-modal li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 1.2rem;
+    //font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+.cd-user-modal article, .cd-user-modal aside, .cd-user-modal details, .cd-user-modal figcaption,.cd-user-modal figure, 
+.cd-user-modal footer,.cd-user-modal header,.cd-user-modal hgroup,.cd-user-modal menu,.cd-user-modal nav,.cd-user-modal section {
+	display: block;
+}
+.cd-user-modal {
+	line-height: 1;
+}
+.cd-user-modal ol,.cd-user-modal ul {
+	list-style: none;
+}
+.cd-user-modal blockquote,.cd-user-modal q {
+	quotes: none;
+}
+.cd-user-modal blockquote:before,.cd-user-modal blockquote:after,
+.cd-user-modal q:before,.cd-user-modal q:after {
+	content: '';
+	content: none;
+}
+.cd-user-modal table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}

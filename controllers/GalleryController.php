@@ -313,7 +313,7 @@ class GalleryController extends MyController
 
     public function actionUploadAjax(){
            $this->Uploads(true);
-     }
+    }
 
     private function CreateDir($folderName){
         if($folderName != NULL){
@@ -405,7 +405,7 @@ class GalleryController extends MyController
             $filePath = GalleryModel::getUploadUrl().$model->ref.'/thumbnail/'.$model->real_name;
             $isImage  = $this->isImage($filePath);
             if($isImage){
-                $file = Html::img($filePath,['class'=>'file-preview-image', 'alt'=>$model->file_name, 'title'=>$model->file_name]);
+                $file = Html::img($filePath,['class'=>'file-preview-image img-responsive', 'alt'=>$model->file_name, 'title'=>$model->file_name]);
             }else{
                 $file =  "<div class='file-preview-other'> " .
                          "<h2><i class='glyphicon glyphicon-file'></i></h2>" .
@@ -513,7 +513,7 @@ class GalleryController extends MyController
         return 1;
     }
     
-    public function actionGetimage() {
+    public function actionGetcaption() {
         if(Yii::$app->request->post() && isset(Yii::$app->request->post()['selected'])){
             $data = Yii::$app->request->post()['selected'];
             $model = GalleryImagesModel::findOne($data);

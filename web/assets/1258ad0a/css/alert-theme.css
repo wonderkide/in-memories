@@ -1,0 +1,64 @@
+/* 
+    Created on : Jan 19, 2017, 12:56:57 PM
+    Author     : wonderkide
+*/
+/*==================== alert notify ====================*/
+.alert-notify-box{
+    position: fixed;
+    bottom: 5%;
+    right: 1%;
+    min-width: 200px;
+    z-index: 9999;
+}
+.alert{
+    border-radius: 5px;
+}
+/*************************** alert massage theme *********************************/
+.alert-black {
+    color: #bfbfbf;
+    background-color: #0d0d0d;
+    border-color: #000000;
+}
+.alert-grey {
+    color: #808080;
+    background-color: #d9d9d9;
+    border-color: #bfbfbf;
+}
+.alert-brown {
+    color: #a52a2a;
+    background-color: #eaaeae;
+    border-color: #e08585;
+}
+.alert-red {
+    color: #ff0000;
+    background-color: #ffb3b3;
+    border-color: #ff8080;
+}
+.alert-orange {
+    color: #ffa500;
+    background-color: #ffe4b3;
+    border-color: #ffd280;
+}
+.alert-yellow {
+    color: #b3b300;
+    background-color: #ffff4d;
+    border-color: #ffff00;
+}
+.alert-blue {
+    color: #0000ff;
+    background-color: #e6e6ff;
+    border-color: #b3b3ff;
+}
+.alert-green {
+    color: #008000;
+    background-color: #ccffcc;
+    border-color: #99ff99;
+}
+.alert-magenta {
+    color: #ff00ff;
+    background-color: #ffb3ff;
+    border-color: #ff80ff;
+}
+.alert .close {
+    color: inherit;
+}

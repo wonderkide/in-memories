@@ -3530,17 +3530,17 @@
     },
     {
         "name": "php-ffmpeg/php-ffmpeg",
-        "version": "0.6.1",
-        "version_normalized": "0.6.1.0",
+        "version": "v0.12",
+        "version_normalized": "0.12.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-            "reference": "7687be530c0bb22ee92ee8924cb0ff0e5edd5e5d"
+            "reference": "0b871e59e7a809033fa27c3086588e72c662e9ab"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/7687be530c0bb22ee92ee8924cb0ff0e5edd5e5d",
-            "reference": "7687be530c0bb22ee92ee8924cb0ff0e5edd5e5d",
+            "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/0b871e59e7a809033fa27c3086588e72c662e9ab",
+            "reference": "0b871e59e7a809033fa27c3086588e72c662e9ab",
             "shasum": ""
         },
         "require": {
@@ -3551,18 +3551,18 @@
             "php": "^5.3.9 || ^7.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "^4.8",
+            "phpunit/phpunit": "^4.8.36",
             "sami/sami": "~1.0",
             "silex/silex": "~1.0"
         },
         "suggest": {
             "php-ffmpeg/extras": "A compilation of common audio & video drivers for PHP-FFMpeg"
         },
-        "time": "2016-03-08T00:47:06+00:00",
+        "time": "2018-07-06T16:51:09+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "0.6-dev"
+                "dev-master": "0.7-dev"
             }
         },
         "installation-source": "dist",
@@ -3590,6 +3590,16 @@
                 "name": "Patrik Karisch",
                 "email": "patrik@karisch.guru",
                 "homepage": "http://www.karisch.guru"
+            },
+            {
+                "name": "Romain Biard",
+                "email": "romain.biard@gmail.com",
+                "homepage": "https://www.strime.io/"
+            },
+            {
+                "name": "Jens Hausdorf",
+                "email": "hello@jens-hausdorf.de",
+                "homepage": "https://jens-hausdorf.de"
             }
         ],
         "description": "FFMpeg PHP, an Object Oriented library to communicate with AVconv / ffmpeg",

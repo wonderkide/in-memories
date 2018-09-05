@@ -70,8 +70,8 @@ echo SortableInput::widget([
     'name'=> 'sort_list_1',
     'items' => $item,
     'hideInput' => true,
-    'options' => ['class'=>'form-control','id'=>'update-drag-img', 'readonly'=>true]
+    'options' => ['class'=>'form-control','id'=>'update-drag-item', 'readonly'=>true]
 ]);
 ?>
-
+<?= '<input type="hidden" name="data-to" id="link-to" value="gallery">' ?>
 <?php } ?>

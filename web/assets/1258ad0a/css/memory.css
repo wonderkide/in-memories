@@ -1,0 +1,28 @@
+/* 
+    Created on : Oct 27, 2016, 4:54:58 PM
+    Author     : wonderkide
+*/
+
+section.memory-view{
+    //border: 1px solid #000000;
+    //border-radius: 5px;
+    //background: #ffe6e6;
+    //box-shadow: 2px 5px 8px #ff4d4d;
+}
+
+section.memory-view .content{
+    padding: 15px 20px;
+    //margin-bottom: 20px;
+}
+
+section.memory-view .memory-view-footer{
+    padding: 0 20px;
+    //margin-bottom: 20px;
+}
+section.memory-view .user-detail{
+    color: #999999;
+}
+.likebox {
+    padding-top: 20px !important;
+}
+

@@ -1,0 +1,238 @@
+/* 
+    Created on : Sep 16, 2016, 1:40:30 PM
+    Author     : wonderkide
+*/
+.text-bold{
+    font-weight: bold;
+}
+.align-right{
+    text-align: right;
+}
+.align-left{
+    text-align: left;
+}
+.align-center{
+    text-align: center;
+}
+table .firstcolumn{
+    padding-left: 10px;
+}
+.marTB15{
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.float-left{
+    float: left;
+}
+.float-right{
+    float: right;
+}
+
+
+table .firstcolumn .glyphicon{
+    top: 4px;
+    color: #6699ff;
+}
+
+
+
+.wb-header{
+    border-radius: 8px 8px 0 0;
+    padding-top: 15px;
+    margin-bottom: 15px;
+}
+.wb-header .member-top-right{
+    padding-right: 15px;
+}
+.wb-header .member-top-right .reply-report-box{
+    display: block;
+    font-size: 2em;
+}
+.wb-header .member-top-right .reply-report-box button{
+    position: relative;
+    display: block;
+}
+.wb-header .member-top-right .reply-report-box .badge{
+    position: absolute;
+    font-size: 0.35em;
+    right: 0px;
+    top: 0px;
+}
+.wb-header .member-top-right .reply-report-box .popover-content{
+    padding: 0;
+}
+.wb-header .member-top-right .reply-report-box .popover-content .list-group{
+    margin-bottom: 0;
+}
+
+
+.wb-footer{
+    border-radius: 0 0 8px 8px;
+}
+.list-page ul, .list-style-none{
+    list-style: none;
+}
+.list-page ul li{
+    float: left;
+    line-height: 2.5em;
+}
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+    
+}
+table thead{
+    font-size: 1.1em;
+    line-height: 3em;
+    font-weight: bold;
+}
+table tbody{
+    line-height: 2.5em;
+}
+
+/**************************** table directory ********************************/
+.wb-main-content .topic, .wb-main-content .post {
+    width: 15%;
+}
+
+/************************************************************/
+
+/***********************forum********************/
+ .wb-forum-content .time {
+    width: 25%;
+}
+.wb-forum-content .by, .wb-forum-content .post-reply {
+    width: 15%;
+}
+/************** action **************/
+.wb-action{
+}
+.wb-action ul{
+    list-style: none;
+    -webkit-padding-start: 0px;
+}
+.wb-action ul li{
+    margin-right: 5px;
+}
+/*************** topic content*************/
+
+.wb-topic-content .post-box{
+    margin-bottom: 20px;
+    border: 1px solid #969696;
+    box-shadow: 2px 5px 8px #969696;
+}
+.wb-topic-content .post-box .post-box-content{
+    padding: 20px;
+}
+.wb-topic-content .post-box .post-box-content .username{
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+.wb-topic-content .post-box .post-box-content .user-class{
+    text-align: center;
+    font-weight: bold;
+}
+.wb-topic-content .post-box .post-box-content img{
+    //max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.wb-topic-content .post-box .post-box-content .comment-action{
+    position: absolute;
+    top: 15px;
+    right: 3%;
+}
+.wb-topic-content .post-box .post-box-content .head-reply{
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.wb-topic-content .post-box .post-box-content .other-detail{
+    font-size: 0.9em;
+}
+.wb-topic-content .parent-comment{
+    padding-left: 20px;
+}
+.post-box-content .content{
+    padding-top: 10px;
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+.post-box .user-data{
+    width: 20%;
+    display: block;
+}
+.post-box .post-content{
+    width: 80%;
+    min-height: 424px;
+    border-left-width: 1px; border-left-style: solid; border-left-color: rgb(150, 150, 150);
+}
+.post-box .post-footer{
+    padding: 0 20px;
+}
+
+.post-footer .post-user, .post-footer .post-action{
+    float: left;
+}
+.post-footer .post-user{
+    width: 65%;
+}
+.post-footer .post-action{
+    width: 35%;
+}
+
+.post-footer .post-user .post-edit{
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+
+@media screen and (min-width: 375px) and (max-width: 800px){
+    .wb-action{
+        margin-bottom: 15px;
+    }
+    .post-box .user-data{
+        width: 30%;
+    }
+    .post-box .post-content{
+        width: 70%
+    }
+    .wb-topic-content .post-box .post-box-content .comment-action{
+        top: 15px;
+        right: 6%;
+    }
+
+}
+@media screen and (max-width: 375px){
+    .wb-action{
+        margin-bottom: 10px;
+    }
+    .wb-action ul li{
+        margin-right: 0px;
+    }
+    .wb-action ul li .btn{
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+    .post-box .post-content{
+        min-height: 0;
+    }
+    .post-box .user-data, .post-box .post-content{
+        width: 100%;
+    }
+    .wb-topic-content .post-box .post-box-content img{
+        width: 100px;
+    }
+    .wb-topic-content .post-box .post-box-content .comment-action{
+        top: 15px;
+        right: 10%;
+    }
+    .post-box .post-footer{
+        padding: 0;
+    }
+
+}
+
+

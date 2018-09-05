@@ -20,6 +20,9 @@ use Yii;
  */
 class VideoModel extends \yii\db\ActiveRecord
 {
+    public $image;
+    
+    const UPLOAD_FOLDER = 'uploads/video';
     /**
      * @inheritdoc
      */
@@ -60,5 +63,14 @@ class VideoModel extends \yii\db\ActiveRecord
             'show' => 'Show',
             'banned' => 'Banned',
         ];
+    }
+    
+    public static function getUploadPath(){
+        return Yii::getAlias('@webroot').'/'.self::UPLOAD_FOLDER.'/'.Yii::$app->user->id.'/';
+    }
+    
+    public function getFirstItem($id) {
+        $model = VideoItemModel::find()->where(['id_video' => $id])->orderBy(['sorting'=>SORT_ASC])->one();
+        return $model;
     }
 }

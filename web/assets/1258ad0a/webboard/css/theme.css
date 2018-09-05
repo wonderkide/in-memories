@@ -1,0 +1,94 @@
+/* 
+    Created on : Sep 16, 2016, 4:50:26 PM
+    Author     : system
+*/
+
+.wb-header{
+    background: #f5f5f5;
+}
+.wb-header .member-top-right .reply-report-box a.header{
+    color: #0099cc;
+}
+.wb-header .member-top-right .reply-report-box a:hover{
+    text-decoration: none;
+}
+
+.table-border td, .table-border th{
+    //border: 1px solid black;
+}
+table thead{
+    //background: #c2c2a3;
+    background: #f2f2f2; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#fff, #d9d9d9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#fff, #d9d9d9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#fff, #d9d9d9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#fff, #d9d9d9); /* Standard syntax */
+}
+
+/*table tbody tr:nth-child(odd) {
+    background: #f5f5f0;
+}
+
+table tbody tr:nth-child(even) {
+    background: #ebebe0;
+}*/
+table tr{
+    border-bottom: 0.5px solid #d9d9d9;
+}
+
+table.hover-line tbody tr:hover{
+    background: #f5f5f0;
+}
+
+.wb-footer{
+    //background: #b8b894;
+}
+
+.wb-topic-content .parent-comment .post-box{
+    background: #f2f2f2;
+}
+
+.wb-header .btn-popover-style {
+    cursor: pointer;
+    padding: 5px 15px;
+    margin-right: 10px;
+    //font-size: 1.5em;
+    color: #808080;
+    background-color: #f5f5f5;
+    border: 0;
+    outline:0;
+}
+.wb-header .btn-popover-style .badge {
+    //color: #e60000;
+    background: #e60000;
+}
+.wb-header .btn-popover-style:hover, .btn-popover-style:focus {
+    color: #0d0d0d;
+    //background-color: #fff;
+}
+.wb-header .btn-popover-style:hover > .badge{
+    //background-color: #1a1a1a;
+}
+
+.post-footer .post-user{
+    color: #808080;
+}
+
+.reply-report-box .list-group a.non-active{
+    background: #e6e6e6;
+}
+.reply-report-box .list-group a.non-active:hover{
+    background: #f5f5f5;
+}
+
+/***************** search box ******************/
+.wb-header .search-box{
+    background: #d9d9d9;
+    border: 3px solid #d9d9d9;
+    border-right: 0;
+    border-radius: 6px;
+}
+.wb-header .search-box .btn{
+    background: #d9d9d9;
+    padding: 5px 18px;
+}

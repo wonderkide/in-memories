@@ -10,10 +10,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\CommentModel;
 use app\models\ContentModel;
+use app\models\UserModel;
 use yii\data\Pagination;
-use yii\imagine\Image;
 use app\models\VideoItemModel;
-use app\models\VideoitemSearchModel;
+use yii\web\UploadedFile;
+use yii\helpers\BaseFileHelper;
+use yii\helpers\Url;
 
 /**
  * VideoController implements the CRUD actions for VideoModel model.
@@ -53,7 +55,7 @@ class VideoController extends MyController
     public function actionManage() {
         $this->isLogin();
         $searchModel = new VideoSearchModel();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchByUser(Yii::$app->request->queryParams);
         return $this->render('manage', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -74,8 +76,11 @@ class VideoController extends MyController
                 'content' => $content,
             ]);
         }
-        $username = \app\models\UserModel::getName($model->id_user);
-        \Yii::$app->view->title = $model->title;
+        $items = VideoItemModel::find()->where(['id_video'=>$id])->orderBy(['sorting'=>SORT_ASC])->all();
+        \Yii::$app->view->title = 'วีดีโอ :: ' . $model->name;
+        
+        $user = UserModel::findOne($model->id_user);
+
         $comment = CommentModel::find()->where(['id_parent'=>0, 'id_cat'=>$model->id, 'category'=>'video'])->orderBy(['create_time'=>SORT_ASC]);
         $count = $comment->count();
         // create a pagination object with the total count
@@ -91,7 +96,8 @@ class VideoController extends MyController
         }
         return $this->render('view', [
             'model' => $model,
-            'username' => $username,
+            'items' => $items,
+            'user' => $user,
             'comment' => $comments,
             'top_comment' => $top_comment,
             'pages' => $pagination,
@@ -128,24 +134,29 @@ class VideoController extends MyController
     }
     
     public function actionItem($id){
-        $model = $this->findModel($id);
-        $item = VideoItemModel::find()->where(['id_video'=>$id])->one();
-        //var_dump($item);exit();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->id_user = Yii::$app->user->id;
-            $model->create_time = date('Y-m-d H:i:s');
-            $model->read = 0;
-            if($model->save()){
-                ExpController::createLogEXP(Yii::$app->user->id, $model->id, 'video', 'add video');
-                return $this->redirect([Yii::$app->seo->getUrl('video/item/'+$id)]);
-            }
-            return $this->redirect(['manage']);
-        } else {
-            return $this->render('_item', [
-                'model' => $model,
-                'item' => $item,
-            ]);
+        
+        $active = null;
+        if(Yii::$app->request->get('active')){
+            $active = Yii::$app->request->get('active');
         }
+
+        $initialPreview = null;
+        $initialPreviewConfig = null;
+        $items = null;
+        
+        $model = $this->findModel($id);
+        if($model){
+            list($initialPreview,$initialPreviewConfig) = $this->getInitialPreview($model->id);
+            $items = VideoItemModel::find()->where(['id_video'=>$id])->orderBy(['sorting'=>SORT_ASC])->all();
+        }
+        
+        return $this->render('_item', [
+            'model' => $model,
+            'initialPreview'=>$initialPreview,
+            'initialPreviewConfig'=>$initialPreviewConfig,
+            'items' => $items,
+            'active' => $active,
+        ]);
     }
 
     /**
@@ -196,63 +207,245 @@ class VideoController extends MyController
         }
     }
     
-    public function actionImageUpload()
-    {
-        $model = new WhateverYourModel();
+    public function actionDeletefileAjax(){
 
-        $imageFile = UploadedFile::getInstance($model, 'image');
-
-        $directory = Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . Yii::$app->session->id . DIRECTORY_SEPARATOR;
-        if (!is_dir($directory)) {
-            FileHelper::createDirectory($directory);
+        $model = VideoItemModel::findOne(Yii::$app->request->post('key'));
+        if($model!==NULL){
+            $filename  = $_SERVER["DOCUMENT_ROOT"].$model->path;
+            if($model->delete()){
+                @unlink($filename);
+                //@unlink($thumbnail);
+                echo json_encode(['success'=>true]);
+            }else{
+                echo json_encode(['success'=>false]);
+            }
+        }else{
+          echo json_encode(['success'=>false]);
         }
-
-        if ($imageFile) {
-            $uid = uniqid(time(), true);
-            $fileName = $uid . '.' . $imageFile->extension;
-            $filePath = $directory . $fileName;
-            if ($imageFile->saveAs($filePath)) {
-                $path = '/img/temp/' . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
-                return Json::encode([
-                    'files' => [
-                        [
-                            'name' => $fileName,
-                            'size' => $imageFile->size,
-                            'url' => $path,
-                            'thumbnailUrl' => $path,
-                            'deleteUrl' => 'image-delete?name=' . $fileName,
-                            'deleteType' => 'POST',
-                        ],
-                    ],
+    }
+    
+    private function getInitialPreview($id) {
+            $datas = VideoItemModel::find()->where(['id_video'=>$id])->orderBy(['sorting'=>SORT_ASC])->all();
+            $initialPreview = [];
+            $initialPreviewConfig = [];
+            foreach ($datas as $key => $value) {
+                array_push($initialPreview, $this->getTemplatePreview($value));
+                array_push($initialPreviewConfig, [
+                    'caption'=> "<label>".$value->title."</label>",
+                    'width'  => '120px',
+                    'url'    => Url::to(['/video/deletefile-ajax']),
+                    'key'    => $value->id,
+                    'showDrag' => false,
                 ]);
             }
-        }
-
-        return '';
+            return  [$initialPreview,$initialPreviewConfig];
     }
+    
+    private function getTemplatePreview(VideoItemModel $model){
+            if($model){
+                $thumb = null;
+                if($model->thumbnail){
+                    $thumb = 'poster="'.$model->thumbnail.'"';
+                }
+                $file = '<video id="video-'.$model->id.'" class="kv-preview-data" '.$thumb.'  controls><source src="'. $model->path .'" type="video/mp4"></video>' ;
+            }else{
+                $file =  "<div class='file-preview-other'> " .
+                         "<h2><i class='glyphicon glyphicon-file'></i></h2>" .
+                         "</div>";
+            }
+            return $file;
+    }
+    
+    public function actionUploadAjax(){
+           $this->Uploads(true);
+    }
+    
+    private function CreateDir(){
+        $basePath = VideoModel::getUploadPath();
+        if(BaseFileHelper::createDirectory($basePath,0777)){
+            BaseFileHelper::createDirectory($basePath.'/thumbnail',0777);
+        }
+        return;
+    }
+    
+    private function Uploads($isAjax=false) {
+             if (Yii::$app->request->isPost) {
+                $images = UploadedFile::getInstancesByName('upload_ajax');
+                if ($images) {
 
-    public function actionImageDelete($name)
-    {
-        $directory = Yii::getAlias('@frontend/web/img/temp') . DIRECTORY_SEPARATOR . Yii::$app->session->id;
-        if (is_file($directory . DIRECTORY_SEPARATOR . $name)) {
-            unlink($directory . DIRECTORY_SEPARATOR . $name);
+                    if($isAjax===true){
+                        $model_id = Yii::$app->request->post('id');
+                    }
+
+                    $this->CreateDir();
+
+                    foreach ($images as $file){
+                        $fileName       = $file->baseName . '.' . $file->extension;
+                        $realFileName   = md5($file->baseName.time()) . '_' . $fileName;
+                        $savePath       = VideoModel::UPLOAD_FOLDER.'/'.Yii::$app->user->id.'/'. $realFileName;
+                        if($file->saveAs($savePath)){
+                            
+                            $model = new VideoItemModel();
+                            $model->id_video = $model_id;
+                            $model->path = '/'.$savePath;
+                            $model->sorting = $this->getSorting($model_id);
+
+                            if($model->save()){
+                                //$thumbPath = VideoModel::UPLOAD_FOLDER.'/'.Yii::$app->user->id.'/thumbnail/';
+                                //$this->getThumbVideo($savePath,$thumbPath);
+                            }
+
+                            if($isAjax===true){
+                                echo json_encode(['success' => 'true']);
+                            }
+
+                        }else{
+                            if($isAjax===true){
+                                echo json_encode(['success'=>'false','eror'=>$file->error]);
+                            }
+                        }
+
+                    }
+                }
+            }
+    }
+    
+    public function getSorting($id) {
+        $model = VideoItemModel::find()->where(['id_video' => $id])->orderBy(['sorting'=>SORT_DESC])->one();
+        if($model){
+            return $model->sorting+1;
+        }
+        return 1;
+    }
+    
+    public function actionSortable(){
+        if(!Yii::$app->request->get('data-selected') || !Yii::$app->request->get('sort')){
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        $id = Yii::$app->request->get('data-selected');
+        $action = Yii::$app->request->get('sort');
+        
+        $model = VideoItemModel::findOne($id);
+        $sort = $model->sorting;
+        $video = VideoModel::findOne($model->id_video);
+        
+        if(!$model || !$this->checkPermission($video->id_user)){
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        $files = FileHelper::findFiles($directory);
-        $output = [];
-        foreach ($files as $file) {
-            $fileName = basename($file);
-            $path = '/img/temp/' . Yii::$app->session->id . DIRECTORY_SEPARATOR . $fileName;
-            $output['files'][] = [
-                'name' => $fileName,
-                'size' => filesize($file),
-                'url' => $path,
-                'thumbnailUrl' => $path,
-                'deleteUrl' => 'image-delete?name=' . $fileName,
-                'deleteType' => 'POST',
-            ];
+        $condition = ['>', 'sorting', $sort];
+        $orderBy = ['sorting' => SORT_ASC];
+
+
+        if ($action == 'up') {
+            $condition = ['<', 'sorting', $sort];
+            $orderBy = ['sorting' => SORT_DESC];
         }
-        return Json::encode($output);
+
+
+        $nextModel = VideoItemModel::find()->where($condition)->andWhere(['id_video'=>$model->id_video])->orderBy($orderBy)->one();
+
+        if (!empty($model) && !empty($nextModel)) {
+            $model->sorting = $nextModel->sorting;
+            $nextModel->sorting = $sort;
+            $nextModel->update();
+            $model->update();
+        }
+        
+        return $this->redirect([Yii::$app->seo->getUrl('video/item').'/'.$model->id_video.'?active=sort']);
+    }
+    
+    public function actionGetcaption() {
+        if(Yii::$app->request->post() && isset(Yii::$app->request->post()['selected'])){
+            $data = Yii::$app->request->post()['selected'];
+            $model = VideoItemModel::findOne($data);
+            return $model->id.','.$model->title.','.$model->detail;
+        }
+        return 0;
+    }
+    
+    public function actionUpdatecaption() {
+        if(Yii::$app->request->post() && isset(Yii::$app->request->post()['selected'])){
+            $selected = Yii::$app->request->post()['selected'];
+            $title = Yii::$app->request->post()['title'];
+            $detail = Yii::$app->request->post()['detail'];
+            
+            $model = VideoItemModel::findOne($selected);
+            $video = VideoModel::findOne($model->id_video);
+            if($model && $this->checkPermission($video->id_user)){
+                $model->title = $title;
+                $model->detail = $detail;
+                if($model->save()){
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    
+    public function actionUpdatesort() {
+        if(Yii::$app->request->post() && isset(Yii::$app->request->post()['data'])){
+            $data = Yii::$app->request->post()['data'];
+
+            $newsort = explode(",",$data);
+
+            $sort = 1;
+            foreach ($newsort as $value) {
+                $model = VideoItemModel::findOne($value);
+                $model->sorting = $sort;
+                if($model->save()){
+                    $sort++;
+                }
+            }
+            return 1;
+        }
+        return 0;
+    }
+    
+    public function actionUploadThumbnail(){
+        if(Yii::$app->request->post()){
+            $thumbs_dir = '/uploads/video/';
+            if(isset($_POST['item']) && isset($_POST['content'])){
+                $data = $_POST['content'];
+                $id = $_POST['item'];
+                if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
+                    $data = substr($data, strpos($data, ',') + 1);
+                    $type = strtolower($type[1]); // jpg, png, gif
+
+                    if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png' ])) {
+                        //throw new \Exception('invalid image type');
+                        return 0;
+                    }
+
+                    $data = base64_decode($data);
+
+                    if ($data === false) {
+                        //throw new \Exception('base64_decode failed');
+                        return 0;
+                    }
+                } else {
+                    //throw new \Exception('did not match data URI with image data');
+                    return 0;
+                }
+                $prefix = md5(date('Y-m-d').$id);
+                $thumbPath = VideoModel::UPLOAD_FOLDER.'/'.Yii::$app->user->id.'/thumbnail/' . $prefix;
+                
+                $path = '/'.$thumbPath . '_thumbnail.' . $type;
+
+                file_put_contents("{$thumbPath}_thumbnail.{$type}", $data);
+                
+                $cut_id = str_replace('video-', '', $id);
+                $model = VideoItemModel::findOne($cut_id);
+                if($model){
+                    $model->thumbnail = $path;
+                    if($model->save()){
+                        return 1;
+                    }
+                }
+            }
+            
+        }
+        return 0;
     }
     
 }

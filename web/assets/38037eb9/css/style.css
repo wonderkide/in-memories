@@ -1,0 +1,23 @@
+/* 
+    Created on : Jul 21, 2017, 12:29:25 PM
+    Author     : wonderkide
+*/
+
+.login_content form div input.submit{
+    font-size: 12px;
+    margin: 10px 15px 0 0;
+    float: none;
+}
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+    position: static;
+    margin-left: 0;
+}
+form .form-label{
+    text-align: right;
+}
+p.btn-create{
+    margin-top: 20px;
+}
+p.label{
+    color: #73879C;
+}

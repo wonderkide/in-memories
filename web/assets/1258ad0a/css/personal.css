@@ -1,0 +1,45 @@
+/*
+style in personal control
+*/
+/* 
+    Created on : Oct 19, 2016, 4:11:48 PM
+    Author     : wonderkide
+*/
+.alert-theme.black{
+    background: #000000;
+    color: #000000;
+}
+.alert-theme.grey{
+    background: #808080;
+    color: #808080;
+}
+.alert-theme.brown{
+    background: #a52a2a;
+    color: #a52a2a;
+}
+.alert-theme.red{
+    background: #ff0000;
+    color: #ff0000;
+}
+.alert-theme.orange{
+    background: #ffa500;
+    color: #ffa500;
+}
+.alert-theme.yellow{
+    background: #ffff00;
+    color: #ffff00;
+}
+
+.alert-theme.blue{
+    background: #0000ff;
+    color: #0000ff;
+}
+.alert-theme.green{
+    background: #008000;
+    color: #008000;
+}
+.alert-theme.magenta{
+    background: #ff00ff;
+    color: #ff00ff;
+}
+

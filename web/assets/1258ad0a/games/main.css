@@ -1,0 +1,52 @@
+/* 
+    Created on : Oct 7, 2016, 4:52:51 PM
+    Author     : wonderkide
+*/
+
+#game{
+    width: 50%
+}
+
+.table td{
+    width: 50px;
+    height: 70px;
+}
+.bg-style-2{
+    background: #1b7e5a;
+}
+
+.play-1 {
+    cursor: pointer;
+	height: 40px;
+	background: #000;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+}
+.play-2 {
+    cursor: pointer;
+	//width: 20px;
+	height: 40px;
+	background: #003eff;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+}
+
+.play-2.active, .play-1.active{
+    height: 50px;
+}
+.play-1.big-chip{
+    border: 5px solid #00498f;
+}
+.play-2.big-chip{
+    border: 5px solid #000;
+}
+
+.next-walk{
+    cursor: pointer;
+    background: #000;
+}
+.eat-walk{
+    background: #f22;
+}

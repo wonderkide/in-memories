@@ -1,0 +1,42 @@
+/* 
+    Created on : Oct 27, 2016, 5:31:41 PM
+    Author     : wonderkide
+*/
+.list-style-none{
+    list-style: none;
+}
+.likebox{
+    padding-top: 10px;
+}
+.likebox ul{
+    -webkit-padding-start: 20px;
+    margin: 0;
+}
+
+.btn-like-style {
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 1.5em;
+    color: #808080;
+    //background-color: #fff;
+}
+.btn-like-style:hover {
+    color: #0d0d0d;
+    //background-color: #fff;
+}
+.btn-like-style:hover > .badge{
+    background-color: #1a1a1a;
+}
+.btn-like-style.btn-like.plus {
+    color: #0099ff;
+}
+.btn-like-style.btn-like.plus > .badge{
+    background-color: #0099ff;
+}
+
+.btn-like-style.btn-unlike.plus {
+    color: #e60000;
+}
+.btn-like-style.btn-unlike.plus > .badge{
+    background-color: #e60000;
+}

@@ -28,7 +28,7 @@
         "2amigos/yii2-file-upload-widget": "~1.0",
         "yurkinx/yii2-image": "dev-master",
         "kartik-v/yii2-popover-x": "*",
-        "php-ffmpeg/php-ffmpeg": "~0.5",
+        "php-ffmpeg/php-ffmpeg": "^0.12.0",
         "kartik-v/yii2-grid": "@dev",
         "kartik-v/yii2-mpdf": "*",
         "kittinan/thailandpost-track": "^1.0",

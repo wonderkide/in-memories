@@ -1,6 +1,7 @@
 <?php
 use app\components\widgets\gallery2;
 use app\components\widgets\memory2;
+use app\components\widgets\videoJs;
 use app\components\widgets\Footer;
 
 
@@ -15,7 +16,11 @@ use app\components\widgets\Footer;
                 <?php echo gallery2::widget(['render'=>'index']); ?>
 </section>
 
-<section id="about-us" class="page">
+<section id="video" class="page">
+                <?php echo videoJs::widget(['render'=>'index']); ?>
+</section>
+
+<section id="about-us" class="page-alternate">
     <div class="container">
     	<?= Footer::widget(); ?>
     </div>

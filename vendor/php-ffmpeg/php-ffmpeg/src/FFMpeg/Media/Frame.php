@@ -85,40 +85,51 @@ class Frame extends AbstractMediaType
      *
      * @throws RuntimeException
      */
-    public function save($pathfile, $accurate = false)
+    public function save($pathfile, $accurate = false, $returnBase64 = false)
     {
         /**
          * might be optimized with http://ffmpeg.org/trac/ffmpeg/wiki/Seeking%20with%20FFmpeg
          * @see http://ffmpeg.org/ffmpeg.html#Main-options
          */
+        $outputFormat = $returnBase64 ? "image2pipe" : "image2";
         if (!$accurate) {
             $commands = array(
                 '-y', '-ss', (string) $this->timecode,
                 '-i', $this->pathfile,
                 '-vframes', '1',
-                '-f', 'image2'
+                '-f', $outputFormat
             );
         } else {
             $commands = array(
                 '-y', '-i', $this->pathfile,
                 '-vframes', '1', '-ss', (string) $this->timecode,
-                '-f', 'image2'
+                '-f', $outputFormat
             );
+        }
+        
+        if($returnBase64) {
+            array_push($commands, "-");
         }
 
         foreach ($this->filters as $filter) {
             $commands = array_merge($commands, $filter->apply($this));
         }
 
-        $commands = array_merge($commands, array($pathfile));
+        if (!$returnBase64) {
+            $commands = array_merge($commands, array($pathfile));
+        }
 
         try {
-            $this->driver->command($commands);
+            if(!$returnBase64) {
+                $this->driver->command($commands);
+                return $this;
+            }
+            else {
+                return $this->driver->command($commands);
+            }
         } catch (ExecutionFailureException $e) {
             $this->cleanupTemporaryFile($pathfile);
             throw new RuntimeException('Unable to save frame', $e->getCode(), $e);
         }
-
-        return $this;
     }
 }

@@ -74,4 +74,40 @@ class VideoSearchModel extends VideoModel
 
         return $dataProvider;
     }
+    
+    public function searchByUser($params)
+    {
+        $query = VideoModel::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'id_user' => Yii::$app->user->id,
+            'create_date' => $this->create_date,
+            'update_date' => $this->update_date,
+            'read' => $this->read,
+            'show' => $this->show,
+            'banned' => $this->banned,
+        ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'detail', $this->detail]);
+
+        return $dataProvider;
+    }
 }

@@ -21,7 +21,8 @@ class importWDAsset extends AssetBundle {
         'css/main.css',
         'css/theme.css',
         'css/animate.css',
-        'css/img-selected/imgareaselect-animated.css'
+        'css/img-selected/imgareaselect-animated.css',
+        'css/jquery-ui.css',
     ];
     public $js = [
         'js/jquery-ui.min.js',
