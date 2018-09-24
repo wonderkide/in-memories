@@ -11,8 +11,8 @@ use dosamigos\ckeditor\CKEditor;
             <div class="col-md-12">
                 <div class="memory cat-widget wdg-cat-opposite">
                     <div class="widget-title">
-                        <h3><a href="/gallery">GALLERY</a></h3>
-                        <span class="sub-title"><a href="/gallery/view/<?= $gallery->ref ?>"><?= $gallery->title ?></a></span>
+                        <h3><a href="/video">VIDEO</a></h3>
+                        <span class="sub-title"><a href="/video/view/<?= $video->id ?>"><?= $video->title ?></a></span>
                         <span class="sub-title">comment</span>
                         <div class="sep-widget-dou"></div>
                         <div class="clearfix"></div>

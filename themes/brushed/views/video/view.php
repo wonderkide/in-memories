@@ -13,10 +13,13 @@ PlyrAsset::register($this);
 //FPAsset::register($this);
 ?>
 <style>
-video{
-  width: 100%;
-  max-height: 100%;
+.plyr video{
+    max-height:505px;
 }
+/*
+.plyr:-webkit-full-screen video{
+    height: 100%;
+}*/
 .video-wrapper{
     position:relative;
     width:100%;
@@ -24,7 +27,7 @@ video{
 }
 .video-slider-block{
     height:120px;
-    width:800px;
+    width:100%;
     overflow:hidden;
     margin: 0 auto;
 }
@@ -32,7 +35,6 @@ video{
     position:relative;
     width:200px;
     height:120px;
-    
     float:left;
 }
 .video-slider-block .video-item .video-frame{
@@ -54,10 +56,51 @@ video{
     left:38%;
     display:none;
 }
+.vertical-video .video-slider-block{
+    height:100%;
+    width:100%;
+}
+.vertical-video .video-slider-block .video-item{
+    width:100%;
+    height:90px;
+    float:none;
+    margin-bottom:13px;
+}
+/*.vertical-video .video-slider-block .video-item:last-child(1){
+    margin-bottom:0;
+}*/
+.vertical-video .video-slider-block .video-item .video-frame{
+    width:100%;
+    height:90px;
+}
+.vertical-video .video-slider-block .video-item .play-icon{
+    width:50px;
+    top:21%;
+    left:35%;
+    display:none;
+}
+#button-slider-top{
+    position: absolute;
+    top: 1%;
+    left: 41.5%;
+    width: 31px;
+    height: 13px;
+    cursor: pointer;
+    background: url('<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/button_hover_slider_hz.png') 0px 0px no-repeat;
+}
+#button-slider-bottom{
+    position: absolute;
+    left: 41.5%;
+    bottom: 1%;
+    width: 31px;
+    height: 13px;
+    cursor: pointer;
+    background: url('<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/button_hover_slider_hz.png') -31px 0px no-repeat;
+}
 #button-slider-left{
     position: absolute;
     top: 35%;
-    left: 1%;
+    left: 2%;
     width: 13px;
     height: 31px;
     cursor: pointer;
@@ -81,22 +124,7 @@ video{
     margin-bottom:5px;
     /*padding:0 5px;*/
 }
-.ui-slider {
-    /*width: 100%;*/
-    /*height: 8px;
-    border: 0px;
-    background: transparent;
-    margin:0 10px;*/
-}
 .scroll-bar .ui-slider-handle {
-    /*height: 20px;*/
-    /*width:50px;*/
-    /*width: 10px;*/
-    /*padding: 0 50px;*/
-    /*cursor: default;
-    border: 0;
-    margin-top: 3px;*/
-    /*margin: 4px -.6em 0 0;*/
     background: #DE5E60;
     border: 0;
 }
@@ -126,7 +154,7 @@ video{
                                     <div class="col-md-6 col-sm-6">
                                         <div class="gallery-detail-user">
 
-                                            <label>แกลอรี่ : <span><?= $model->name ?></span></label><br>
+                                            <label>วีดีโอ : <span><?= $model->name ?></span></label><br>
                                             <label>โดย : <a href="<?= Yii::$app->seo->getUrl('wonder/user') ?>/<?= $user->id ?>"><span><?php if($user->nickname != null){ echo $user->nickname;}else{echo $user->username;} ?></span></a></label><br>
                                             <label>สร้างเมื่อ : <span><?= helpFunction::dateTime($model->create_date) ?></span></label>
 
@@ -147,53 +175,83 @@ video{
                             <div class="accordion-inner">
                                 <?php if($items): ?>
                                 <div class="gallery-image">
-                                    <div class="video-player" item="0">
-                                        <video id="player"></video>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10">
+                                            <div class="video-player" item="0">
+                                                <video id="player"></video>
+                                            </div>
+                                            <script>
+                                                const player = new Plyr('#player');
+                                                player.source = {
+                                                    type: 'video',
+                                                    title: '<?= $items[0]->title ? $items[0]->title :"" ?>',
+                                                    sources: [
+                                                        {
+                                                            src: '<?= $items[0]->path ?>',
+                                                            type: 'video/mp4'
+                                                        }
+                                                    ],
+                                                    poster: '<?= $items[0]->thumbnail ? $items[0]->thumbnail:""  ?>'
+                                                };
+                                                $(document).on('click',  '.change-source', function(){
+                                                    var path = $(this).attr('path');
+                                                    var thumb = $(this).attr('thumb');
+                                                    var title = $(this).attr('title');
+                                                    var item = $(this).attr('item');
+                                                    player.source = {
+                                                        type: 'video',
+                                                        title: title,
+                                                        sources: [
+                                                            {
+                                                                src: path,
+                                                                type: 'video/mp4'
+                                                            }
+                                                        ],
+                                                        poster: thumb
+                                                    };
+                                                    player.play();
+                                                    $('.video-player').attr('item',item);
+                                                    $('.play-icon').hide();
+                                                    $(this).find('.play-icon.item-'+item).show();
+                                                });
+                                                /*player.on('ready', event => {
+                                                    const instance = event.detail.plyr;
+                                                    console.log(instance);
+                                                });*/
+                                            </script>
+                                        </div>
+                                        <div class="col-lg-2 visible-lg vertical-video">
+                                            <div class="video-wrapper">
+                                                <div class="video-slider-block">
+                                                    <?php foreach ($items as $key => $value): ?>
+                                                    <div class="video-item" item="<?= $key ?>">
+                                                        <a class="change-source" path="<?= $value->path ?>" thumb="<?= $value->thumbnail ? $value->thumbnail:'' ?>" title="<?= $value->title ? $value->title:'' ?>" item="<?= $key ?>">
+                                                            <div class="video-frame"></div>
+                                                            <img class="img-responsive" src="<?= $value->thumbnail ? $value->thumbnail:'' ?>">
+                                                            <div class="play-icon item-<?= $key ?>" style="display: <?= $key == 0 ? 'block' : 'none' ?>"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>
+                                                        </a>
+                                                    </div>
+                                                    <?php endforeach; ?>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <input type="hidden" id="counter-vt" value="0">
+                                                <input type="hidden" id="marginnow-vt" value="0">
+                                                <input type="hidden" id="status-vt" value="3">
+                                                <div id="button-slider-top" increment="2" style="display: none;"></div>
+                                                <div id="button-slider-bottom" increment="1" style="display: none;"></div>
+                                            </div>
+                                            
+                                        </div>
                                     </div>
-                                    <script>
-                                        const player = new Plyr('#player');
-                                        player.source = {
-                                            type: 'video',
-                                            title: '<?= $items[0]->title ? $items[0]->title :"" ?>',
-                                            sources: [
-                                                {
-                                                    src: '<?= $items[0]->path ?>',
-                                                    type: 'video/mp4'
-                                                }
-                                            ],
-                                            poster: '<?= $items[0]->thumbnail ? $items[0]->thumbnail:""  ?>'
-                                        };
-                                        $(document).on('click',  '.change-source', function(){
-                                            var path = $(this).attr('path');
-                                            var thumb = $(this).attr('thumb');
-                                            var title = $(this).attr('title');
-                                            var item = $(this).attr('item');
-                                            player.source = {
-                                                type: 'video',
-                                                title: title,
-                                                sources: [
-                                                    {
-                                                        src: path,
-                                                        type: 'video/mp4'
-                                                    }
-                                                ],
-                                                poster: thumb
-                                            };
-                                            player.play();
-                                            $('.video-player').attr('item',item);
-                                            $('.play-icon').hide();
-                                            $(this).find('.play-icon').show();
-                                        });
-                                    </script>
                                 </div>
-                                <div class="video-wrapper">
+                                <div class="video-wrapper horizontal-video hidden-lg">
                                     <div class="video-slider-block">
                                         <?php foreach ($items as $key => $value): ?>
                                         <div class="video-item" item="<?= $key ?>">
                                             <a class="change-source" path="<?= $value->path ?>" thumb="<?= $value->thumbnail ? $value->thumbnail:'' ?>" title="<?= $value->title ? $value->title:'' ?>" item="<?= $key ?>">
                                                 <div class="video-frame"></div>
                                                 <img class="img-responsive" src="<?= $value->thumbnail ? $value->thumbnail:'' ?>">
-                                                <div class="play-icon" style="display: <?= $key == 0 ? 'block' : 'none' ?>"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>;
+                                                <div class="play-icon item-<?= $key ?>" style="display: <?= $key == 0 ? 'block' : 'none' ?>"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>
                                             </a>
                                         </div>
                                         <?php endforeach; ?>
@@ -203,6 +261,7 @@ video{
                                     <input type="hidden" id="counter" value="0">
                                     <input type="hidden" id="marginnow" value="0">
                                     <input type="hidden" id="status" value="3">
+                                    <input type="hidden" id="count-items" value="<?= count($items) ?>">
                                     <div id="button-slider-left" increment="2" style="display: none;"></div>
                                     <div id="button-slider-right" increment="1" style="display: none;"></div>
                                 </div>
@@ -233,12 +292,21 @@ video{
 </section>
 <?php
 $js = <<< JS
+var video_height = $('.video-player').height();
+$('.vertical-video .video-wrapper').css("max-height",video_height+"px");
+
         
-var video_wrapper = $('.video-wrapper').width();
-var video_block = $(".video-slider-block").width();
+var items = $('#count-items').val();
+$(".horizontal-video .video-slider-block").width(items*200);
+var video_wrapper = $('.video-wrapper.horizontal-video').width();
+var video_block = $(".horizontal-video .video-slider-block").width();
+        
+if(video_block <= video_wrapper){
+    $('.scroll-bar').hide();
+}
 $(window).on('resize', function(){
-    video_wrapper = $('.video-wrapper').width();
-    video_block = $(".video-slider-block").width();
+    video_wrapper = $('.video-wrapper.horizontal-video').width();
+    video_block = $(".horizontal-video .video-slider-block").width();
     if(video_block <= video_wrapper){
         $('.scroll-bar').hide();
     }
@@ -247,20 +315,35 @@ $(window).on('resize', function(){
     }
 });
 
-$(".video-wrapper").mouseenter(function() {
+$(".video-wrapper.horizontal-video").mouseenter(function() {
     if(video_wrapper < video_block){
-        showButtonSlider();
+        showButtonSliderHz();
     }
 }).mouseleave(function() {
-    hideButtonSlider();
+    hideButtonSliderHz();
 });
-function showButtonSlider() {
+$(".vertical-video .video-wrapper").mouseenter(function() {
+    if(video_wrapper < video_block){
+        showButtonSliderVt();
+    }
+}).mouseleave(function() {
+    hideButtonSliderVt();
+});
+function showButtonSliderHz() {
     $('#button-slider-left').show();
     $('#button-slider-right').show();
 }
-function hideButtonSlider() {
+function hideButtonSliderHz() {
     $('#button-slider-left').hide();
     $('#button-slider-right').hide();
+}
+function showButtonSliderVt() {
+    $('#button-slider-top').show();
+    $('#button-slider-bottom').show();
+}
+function hideButtonSliderVt() {
+    $('#button-slider-top').hide();
+    $('#button-slider-bottom').hide();
 }
         
 $(".video-item").mouseenter(function() {
@@ -287,8 +370,8 @@ $('#button-slider-right').on("click", function(e) {
 function increment(typecount) {
     if ($("#status").val() == 3) {
         $("#status").val(typecount);
-        var numli = $('.video-wrapper').width();
-        var allwidth = $(".video-slider-block").width();
+        var numli = $('.video-wrapper.horizontal-video').width();
+        var allwidth = $(".horizontal-video .video-slider-block").width();
         var posnow = Math.abs($('#marginnow').val());
         if (typecount == 1) {
             var marginlast = posnow + numli;
@@ -327,16 +410,16 @@ function count(intv, marginlast) {
         var t = ++d;
         $("#counter").val(t);
         $(".ui-slider-handle").css("left", t + "%");
-        var margin = Math.round(t / 100 * ($(".video-wrapper").width() - $(".video-slider-block").width()));
+        var margin = Math.round(t / 100 * ($(".video-wrapper.horizontal-video").width() - $(".horizontal-video .video-slider-block").width()));
         $("#marginnow").val(margin);
-        $(".video-slider-block").css("margin-left", margin + "px");
+        $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
     } else if (intv == 2 && d > 0 && l < marginlast * -1) {
         var t = --d;
         $("#counter").val(t);
         $(".ui-slider-handle").css("left", t + "%");
-        var margin = Math.round(t / 100 * ($(".video-wrapper").width() - $(".video-slider-block").width()));
+        var margin = Math.round(t / 100 * ($(".video-wrapper.horizontal-video").width() - $(".horizontal-video .video-slider-block").width()));
         $("#marginnow").val(margin);
-        $(".video-slider-block").css("margin-left", margin + "px");
+        $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
     } else {
         increment(3);
     }
@@ -345,12 +428,84 @@ function count(intv, marginlast) {
 $(".scroll-bar").slider({
     max: 100,
     slide: function( event, ui ) {
-        var margin = Math.round( ui.value / 100 * ($(".video-wrapper").width() - $(".video-slider-block").width()));
-        $(".video-slider-block").css("margin-left", margin + "px");
+        var margin = Math.round( ui.value / 100 * ($(".video-wrapper.horizontal-video").width() - $(".horizontal-video .video-slider-block").width()));
+        $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
         $("#counter").val(ui.value);
         $("#marginnow").val(margin);
     }
 });
+        
+var interv_vt;
+$("#counter-vt").val(0);
+$("#marginnow-vt").val(0);
+$("#status-vt").val(3);
+        
+$('#button-slider-top').on("click", function(e) {
+    incrementVT(2);
+        console.log('#button-slider-top');
+});
+$('#button-slider-bottom').on("click", function(e) {
+    incrementVT(1);
+});
+        
+function incrementVT(typecount) {
+        console.log(typecount);
+    if ($("#status-vt").val() == 3) {
+        $("#status-vt").val(typecount);
+        var numli = $('.vertical-video .video-wrapper').height();
+        var allwidth = $(".vertical-video .video-slider-block").height();
+        var posnow = Math.abs($('#marginnow-vt').val());
+        if (typecount == 1) {
+            var marginlast = posnow + numli;
+            if ((marginlast + numli) < allwidth) {
+                interv_vt = setInterval(function() {
+                    countVT(typecount, marginlast)
+                }, 5);
+            } else {
+                interv_vt = setInterval(function() {
+                    countVT(typecount, allwidth)
+                }, 5);
+            }
+        } else if (typecount == 2) {
+            var marginlast = posnow - numli;
+            if (marginlast > 0) {
+                interv_vt = setInterval(function() {
+                    countVT(typecount, marginlast)
+                }, 5);
+            } else {
+                interv_vt = setInterval(function() {
+                    countVT(typecount, 0)
+                }, 5);
+            }
+        }
+    } else {
+        if (typecount == 3) {
+            clearInterval(interv_vt)
+            $("#status-vt").val(3);
+        }
+    }
+}
+function countVT(intv, marginlast) {
+    var d = $("#counter-vt").val();
+    var l = $("#marginnow-vt").val();
+    if (intv == 1 && d < 100 && (l > marginlast * -1 || l == 0)) {
+        var t = ++d;
+        $("#counter-vt").val(t);
+        //$(".ui-slider-handle").css("left", t + "%");
+        var margin = Math.round(t / 100 * ($(".vertical-video .video-wrapper").height() - $(".vertical-video .video-slider-block").height()));
+        $("#marginnow-vt").val(margin);
+        $(".vertical-video .video-slider-block").css("margin-top", margin + "px");
+    } else if (intv == 2 && d > 0 && l < marginlast * -1) {
+        var t = --d;
+        $("#counter-vt").val(t);
+        //$(".ui-slider-handle").css("left", t + "%");
+        var margin = Math.round(t / 100 * ($(".vertical-video .video-wrapper").height() - $(".vertical-video .video-slider-block").height()));
+        $("#marginnow-vt").val(margin);
+        $(".vertical-video .video-slider-block").css("margin-top", margin + "px");
+    } else {
+        incrementVT(3);
+    }
+}
 JS;
  
 // register your javascript

@@ -212,7 +212,7 @@ setTimeout(function(){
                         }
                 });
                 canvas_count += 1;
-            }, 1000);
+            }, 2000);
             
         }
     });

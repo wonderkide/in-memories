@@ -8,6 +8,7 @@ use app\models\VideoModel;
 class videoJs extends Widget {
     public $render = 'index';
     public $model = null;
+    public $view = 'videoJs';
 
     public function init() {
         if(!$this->model){
@@ -16,7 +17,7 @@ class videoJs extends Widget {
     }
 
     public function run() {
-        return $this->render('videoJs', 
+        return $this->render($this->view,
                 [
                     'model' => $this->model,
                 ]);

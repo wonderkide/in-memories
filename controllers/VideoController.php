@@ -43,12 +43,12 @@ class VideoController extends MyController
      */
     public function actionIndex()
     {
-        $searchModel = new VideoSearchModel();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$searchModel = new VideoSearchModel();
+        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            //'searchModel' => $searchModel,
+            //'dataProvider' => $dataProvider,
         ]);
     }
     
@@ -94,7 +94,7 @@ class VideoController extends MyController
         if($model->id_user != Yii::$app->user->id){
             $this->updateRead($model);
         }
-        return $this->render('view', [
+        return $this->render('view_fp', [
             'model' => $model,
             'items' => $items,
             'user' => $user,
@@ -134,7 +134,7 @@ class VideoController extends MyController
     }
     
     public function actionItem($id){
-        
+        $this->isLogin();
         $active = null;
         if(Yii::$app->request->get('active')){
             $active = Yii::$app->request->get('active');
@@ -148,6 +148,9 @@ class VideoController extends MyController
         if($model){
             list($initialPreview,$initialPreviewConfig) = $this->getInitialPreview($model->id);
             $items = VideoItemModel::find()->where(['id_video'=>$id])->orderBy(['sorting'=>SORT_ASC])->all();
+        }
+        if(!$this->checkPermission($model->id_user)){
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
         
         return $this->render('_item', [
@@ -168,6 +171,9 @@ class VideoController extends MyController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if(!$this->checkPermission($model->id_user)){
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['manage']);
@@ -186,9 +192,34 @@ class VideoController extends MyController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->isLogin();
+        $model = $this->findModel($id);
+        if(!$model || !$this->checkPermission($model->id_user)){
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        $video = VideoItemModel::findAll(['id_video'=>$model->id]);
+        if($video){
+            foreach ($video as $item) {
+                $this->deleteVideoAll($item);
+            }
+        }
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['manage']);
+    }
+    
+    private function deleteVideoAll($item){
+        $file  = $_SERVER["DOCUMENT_ROOT"].$item->path;
+        $thumbnail = $_SERVER["DOCUMENT_ROOT"].$item->thumbnail;
+        if($item->path){
+            @unlink($file);
+            if($item->thumbnail){
+                @unlink($thumbnail);
+            }
+            return true;
+        }else{
+            return FALSE;
+        }
     }
 
     /**
@@ -207,14 +238,40 @@ class VideoController extends MyController
         }
     }
     
+    //create cookie after see topic
+    public function updateRead($model) {
+        $cookies = Yii::$app->request->cookies;
+        $value = substr(Yii::$app->getSecurity()->generateRandomString(),10);
+
+        if (!isset($cookies['gallery-v' . $model->id . '-' . Yii::$app->user->id])) {
+            
+            $model->read += 1;
+            if($model->save()){
+                $cookies = Yii::$app->response->cookies;
+                $cookies->add(new \yii\web\Cookie([
+                    'name' => 'gallery-v' . $model->id. '-' . Yii::$app->user->id,
+                    'value' => $value,
+                    //'expire' => 60*60,
+                ]));
+            }
+        }
+        
+    }
+    
     public function actionDeletefileAjax(){
 
         $model = VideoItemModel::findOne(Yii::$app->request->post('key'));
         if($model!==NULL){
             $filename  = $_SERVER["DOCUMENT_ROOT"].$model->path;
+            $thumbnail = null;
+            if($model->thumbnail){
+                $thumbnail  = $_SERVER["DOCUMENT_ROOT"].$model->thumbnail;
+            }
             if($model->delete()){
                 @unlink($filename);
-                //@unlink($thumbnail);
+                if($thumbnail){
+                    @unlink($thumbnail);
+                }
                 echo json_encode(['success'=>true]);
             }else{
                 echo json_encode(['success'=>false]);
@@ -446,6 +503,108 @@ class VideoController extends MyController
             
         }
         return 0;
+    }
+    
+    public function actionComment($id) {
+        $this->isLogin();
+        if($this->checkBanned()){
+            return $this->redirect(Yii::$app->seo->getUrl('wonder/banned'));
+        }
+        $video = $this->findModel($id);
+        $model = new CommentModel();
+        $reply = Yii::$app->request->get('reply');
+        $user = Yii::$app->request->get('to');
+        if ($model->load(Yii::$app->request->post())) {
+            $model->id_user = Yii::$app->user->id;
+            $model->id_parent = $reply ? $reply : 0;
+            $model->id_cat = $id;
+            $model->category = 'video';
+            $model->create_time = date('Y-m-d H:i:s');
+            $model->update_time = null;
+            $model->create_ip = Yii::$app->request->getUserIP();
+            $model->content = $this->textEditorImageResponsive($model->content);
+            $model->feeling = 0;
+            if($model->save()){
+                if($reply){
+                    $flag_parent = null;
+                    $parent_reply = CommentModel::findOne($reply);
+                    if($parent_reply && $parent_reply->id_user != Yii::$app->user->id){
+                        NotifyController::creatNotify($parent_reply->id_user, $reply, 'comment', 'comment', null, $this->generateUrlNotifyComment($video->id, $model->id));
+                        $flag_parent = $parent_reply->id_user;
+                    }
+                    $all_child = CommentModel::find()->select('id_user')->where(['id_parent'=>$reply])->distinct()->all();
+                    if($all_child){
+                        foreach ($all_child as $row) {
+                            if($row->id_user != Yii::$app->user->id && $row->id_user != $flag_parent){
+                                NotifyController::creatNotify($row->id_user, $reply, 'comment', 'comment', null, $this->generateUrlNotifyComment($video->id, $model->id));
+                            }
+                        }
+                    }
+                }
+                else{
+                    if($video->id_user != Yii::$app->user->id){
+                        NotifyController::creatNotify($video->id_user, $model->id, $model->category, 'comment', null, $this->generateUrlNotifyComment($video->id, $model->id));
+                    }
+                }
+                ExpController::createLogEXP(Yii::$app->user->id, $model->id, 'comment', 'video-comment');
+                return $this->redirect(Yii::$app->seo->getUrl('video/view').'/'.$video->id);
+            }
+        } else {
+            return $this->render('_comment', [
+                'model' => $model,
+                'video' => $video,
+            ]);
+        }
+    }
+    public function actionEditcomment($id) {
+        
+        $this->isLogin();
+        if($this->checkBanned()){
+            return $this->redirect(Yii::$app->seo->getUrl('wonder/banned'));
+        }
+        
+        $model = CommentModel::findOne($id);
+        $video = $this->findModel($model->id_cat);
+        
+        /********** check permission edit **********/
+        
+        if(!$this->checkPermission($model->id_user)){
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->content = $this->textEditorImageResponsive($model->content);
+            $model->update_time = date('Y-m-d H:i:s');
+            if($model->save()){
+                return $this->redirect(Yii::$app->seo->getUrl('video/view').'/'.$video->id);
+            }
+        } else {
+            return $this->render('_comment', [
+                'model' => $model,
+                'video' => $video,
+            ]);
+        }
+    }
+    public function textEditorImageResponsive($content) {
+        preg_match_all('/<img[^>]+>/i',$content, $result);
+        
+        if($result[0]){
+            $count = count($result[0]);
+            for($i=0; $i<$count;$i++){
+                preg_match( '@src="([^"]+)"@' , $result[0][$i], $match );
+                $src = array_pop($match);
+                $content = preg_replace($result[0][$i], 'img src="'.$src.'" class="img-responsive"', $content);
+                
+            }
+        }
+        return $content;
+        
+    }
+    
+    public function generateUrlNotifyComment($video, $id) {
+        $url = '/video/view/' . $video . '#data-comment-' . $id;
+        return $url;
     }
     
 }
