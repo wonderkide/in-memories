@@ -57,7 +57,7 @@ use app\models\CommentModel;
             ?>
 
             <div class="col-md-4 col-sm-6 gallery-item">
-                <div class="gallery-item-wrapper">
+                <div class="gallery-item-wrapper animated fadeInLeft" data-showonscroll="true" data-animation="fadeIn">
                     <a href="<?= Yii::$app->seo->getUrl('gallery/view') ?>/<?= $row->ref ?>" class="gallery-link">
                         <img class="img-responsive" src="<?= $images ?>" alt="in-memories-gallery" />
                         <div class="label label-top">

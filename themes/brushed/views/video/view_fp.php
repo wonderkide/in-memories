@@ -14,7 +14,7 @@ FPAsset::register($this);
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="memory cat-widget">
+                <div class="memory cat-widget animated fadeInRight">
                     <div class="widget-title">
                                 <h4><a href="<?= Yii::$app->seo->getUrl('video') ?>">VIDEO</a></h4>
                                 <span class="sub-title"><?= $model->name ?></span>
@@ -61,7 +61,7 @@ FPAsset::register($this);
                                     $playlist .= '{sources: [{ type: "video/mp4", src:  "'.$value->path.'" }]},';
                                 }
                                 ?>
-                                <div class="gallery-image">
+                                <div class="video-image animated bounceInLeft">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10">
                                             <div class="video-player" item="0">
@@ -152,7 +152,7 @@ FPAsset::register($this);
                                 <?php endif; ?>
 
                             </div>
-                            <section class="gallery-comment">
+                            <section class="gallery-comment animated fadeInRight" data-showonscroll="true" data-animation="fadeIn">
                                 <?php 
                                 if($comment){
                                     echo commentBox::widget(['model'=>$comment, 'top_model'=>$top_comment, 'pagination'=>$pages->getPage(), 'title'=>$model->name, 'category'=>'video', 'id_category'=>$model->id, '_parent'=>null]);

@@ -58,11 +58,11 @@ BRUSHAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 <!-- This section is for Splash Screen -->
-<div class="ole">
+<!--<div class="ole">
 <section id="jSplash">
 	<div id="circle"></div>
 </section>
-</div>
+</div>-->
 <!-- End of Splash Screen -->
 
 <?php

@@ -44,9 +44,12 @@ use app\components\helpFunction;
     }
     @media (min-width: 768px){
         video{
-            max-width: 400px;
+            /*max-width: 400px;*/
             max-height: 250px
         }
+    }
+    .video-sort {
+        text-align: center;
     }
 </style>
 <?php $this->beginContent('@app/views/layouts/_tab_personal.php', ['active' => 'video']); ?>
@@ -67,19 +70,19 @@ use app\components\helpFunction;
                             $link = '<a href="/video/sortable?data-selected='.$value->id.'&sort=up" class="" title="เลื่อนตำแหน่งขึ้นบน"><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></a>'
                                     . '<a href="/video/sortable?data-selected='.$value->id.'&sort=down" class="" title="เลื่อนตำแหน่งลงล่าง"><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></a>';
                         array_push($sort, ['content' => 
-                                                '<div class="row gallery-sort">'
-                                                        . '<div class="img col-md-2 col-xs-12">'.
-                                                        '<video class="kv-preview-data" controls><source src="'. $value->path .'" type="video/mp4"></video>'
+                                                '<div class="row video-sort">'
+                                                        . '<div class="img col-md-4 col-xs-12">'.
+                                                        '<video class="kv-preview-data" controls style="max-width: 200px"><source src="'. $value->path .'" type="video/mp4"></video>'
                                                         . '</div>'
-                                                    . '<div class="col-md-4 col-xs-12 caption" id="caption-'.$value->id.'">'
+                                                    . '<div class="col-md-4 col-xs-12 caption no-padding" id="caption-'.$value->id.'">'
                                                         . '<div class="text-center"><label class="title">'.helpFunction::cutTextByLength($value->title,20).'</label></div>'
                                                         . '<div class="text-center"><label class="detail">'.helpFunction::cutTextByLength($value->detail,20).'</label></div>'
                                                     . '</div>'
-                                                    . '<div class="col-md-3 col-xs-6 action">'
+                                                    . '<div class="col-md-2 col-xs-6 action no-padding">'
                                                         . '<label class="btn btn-info edit-caption" data-selected="'.$value->id.'">แก้ไข Caption</label>'
                                                         .'<input type="hidden" name="data-selected" value="'.$value->id.'">'
                                                     . '</div>'
-                                                    . '<div class="col-md-3 col-xs-6 sort">'
+                                                    . '<div class="col-md-2 col-xs-6 sort no-padding">'
                                                         . $link
                                                     . '</div>'
                                                 .'</div>'

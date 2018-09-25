@@ -51,7 +51,7 @@ use app\models\UserModel;
 
         
         <!-- Start Profile -->
-    	<div class="col-md-4 memory-box">
+    	<div class="col-md-4 memory-box animated fadeInRight">
             <a href="<?= Yii::$app->seo->getUrl('memory/view') ?>/<?= $row->id ?>">
                 <div class="image-wrap">
                     <div class="hover-wrap">
