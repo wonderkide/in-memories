@@ -3,6 +3,12 @@
     Author     : wonderkide
 */
 
+#player{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .flowplayer .fp-playlist{
     display:none;
 }
