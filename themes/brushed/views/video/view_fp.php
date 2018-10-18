@@ -88,16 +88,29 @@ FPAsset::register($this);
                                                     var item = $(this).attr('item');
                                                     fpplayer.error = fpplayer.loading = false;
                                                     fpplayer.play(parseInt(item));
-                                                    $('.video-player').attr('item',item);
-                                                    $('.play-icon').hide();
-                                                    $(this).find('.play-icon.item-'+item).show();
                                                 });
-                                                $(document).on('click',  '.fp-playlist a', function(){  
-                                                    var index = $(this).attr('data-index');
+                                                fpplayer.on("ready", function(e, api) {
+                                                    var video = api.video;
+                                                    $('.video-player').attr('item',video.index);
                                                     $('.play-icon').hide();
-                                                    $('.video-player').attr('item',index);
-                                                    $('.play-icon.item-'+index).show();
+                                                    $(".play-icon").each(function(){
+                                                        $(this).find('img').attr('src','<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png');
+                                                    });
+                                                    $('.play-icon.item-'+video.index).show();
+                                                    
+                                                    sliderItem(video.index);
                                                 });
+                                                fpplayer.on("pause", function(e, api) {
+                                                    console.log("pause");
+                                                    var item = $(".video-player").attr('item');
+                                                    $('.play-icon.item-'+item).find('img').attr('src','<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/pause_icon.png');
+                                                });
+                                                fpplayer.on("resume", function(e, api) {
+                                                    console.log("playing");
+                                                    var item = $(".video-player").attr('item');
+                                                    $('.play-icon.item-'+item).find('img').attr('src','<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png');
+                                                });
+                                                
                                             </script>
                                         </div>
                                         <div class="col-lg-2 visible-lg vertical-video">
@@ -110,7 +123,7 @@ FPAsset::register($this);
                                                             <?php if($value->thumbnail): ?>
                                                             <img class="img-responsive video-thumbnail" src="<?= $value->thumbnail ?>">
                                                             <?php endif; ?>
-                                                            <div class="play-icon item-<?= $key ?>" style="display: <?= $key == 0 ? 'block' : 'none' ?>"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>
+                                                            <div class="play-icon item-<?= $key ?>" style="display: none;"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>
                                                         </a>
                                                     </div>
                                                     <?php endforeach; ?>
@@ -134,7 +147,7 @@ FPAsset::register($this);
                                                 <?php if($value->thumbnail): ?>
                                                 <img class="img-responsive video-thumbnail" src="<?= $value->thumbnail ?>">
                                                 <?php endif; ?>
-                                                <div class="play-icon item-<?= $key ?>" style="display: <?= $key == 0 ? 'block' : 'none' ?>"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>
+                                                <div class="play-icon item-<?= $key ?>" style="display: none;"><img class="img-responsive" src="<?= Yii::$app->assetManager->getPublishedUrl('@BRUSHAsset') ?>/img/play_icon.png"></div>
                                             </a>
                                         </div>
                                         <?php endforeach; ?>

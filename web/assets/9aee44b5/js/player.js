@@ -2,10 +2,13 @@
 $('.vertical-video .video-wrapper').css("max-height","505px");
         
 var items = $('#count-items').val();
-$(".horizontal-video .video-slider-block").width(items*200);
+var HzItemWidth = $(".horizontal-video .video-item").width();
+$(".horizontal-video .video-slider-block").width(items*HzItemWidth);
+console.log(HzItemWidth);
 var video_wrapper = $('.video-wrapper.horizontal-video').width();
 var video_block = $(".horizontal-video .video-slider-block").width();
         
+var VtItemHeight = $(".vertical-video .video-item").height();
 var vertical_wrapper = $('.vertical-video .video-wrapper').height();
 var vertical_block = $(".vertical-video .video-slider-block").height();
         
@@ -15,6 +18,8 @@ if(video_block <= video_wrapper){
 $(window).on('resize', function(){
     video_wrapper = $('.video-wrapper.horizontal-video').width();
     video_block = $(".horizontal-video .video-slider-block").width();
+    vertical_wrapper = $('.vertical-video .video-wrapper').height();
+    vertical_block = $(".vertical-video .video-slider-block").height();
     if(video_block <= video_wrapper){
         $('.scroll-bar').hide();
     }
@@ -85,22 +90,22 @@ function increment(typecount) {
             var marginlast = posnow + numli;
             if ((marginlast + numli) < allwidth) {
                 interv = setInterval(function() {
-                    count(typecount, marginlast)
+                    count(typecount, marginlast);
                 }, 5);
             } else {
                 interv = setInterval(function() {
-                    count(typecount, allwidth)
+                    count(typecount, allwidth);
                 }, 5);
             }
         } else if (typecount == 2) {
             var marginlast = posnow - numli;
             if (marginlast > 0) {
                 interv = setInterval(function() {
-                    count(typecount, marginlast)
+                    count(typecount, marginlast);
                 }, 5);
             } else {
                 interv = setInterval(function() {
-                    count(typecount, 0)
+                    count(typecount, 0);
                 }, 5);
             }
         }
@@ -150,14 +155,12 @@ $("#status-vt").val(3);
         
 $('#button-slider-top').on("click", function(e) {
     incrementVT(2);
-        console.log('#button-slider-top');
 });
 $('#button-slider-bottom').on("click", function(e) {
     incrementVT(1);
 });
         
 function incrementVT(typecount) {
-        console.log(typecount);
     if ($("#status-vt").val() == 3) {
         $("#status-vt").val(typecount);
         var numli = $('.vertical-video .video-wrapper').height();
@@ -167,28 +170,28 @@ function incrementVT(typecount) {
             var marginlast = posnow + numli;
             if ((marginlast + numli) < allwidth) {
                 interv_vt = setInterval(function() {
-                    countVT(typecount, marginlast)
+                    countVT(typecount, marginlast);
                 }, 5);
             } else {
                 interv_vt = setInterval(function() {
-                    countVT(typecount, allwidth)
+                    countVT(typecount, allwidth);
                 }, 5);
             }
         } else if (typecount == 2) {
             var marginlast = posnow - numli;
             if (marginlast > 0) {
                 interv_vt = setInterval(function() {
-                    countVT(typecount, marginlast)
+                    countVT(typecount, marginlast);
                 }, 5);
             } else {
                 interv_vt = setInterval(function() {
-                    countVT(typecount, 0)
+                    countVT(typecount, 0);
                 }, 5);
             }
         }
     } else {
         if (typecount == 3) {
-            clearInterval(interv_vt)
+            clearInterval(interv_vt);
             $("#status-vt").val(3);
         }
     }
@@ -212,5 +215,66 @@ function countVT(intv, marginlast) {
         $(".vertical-video .video-slider-block").css("margin-top", margin + "px");
     } else {
         incrementVT(3);
+    }
+}
+
+function sliderItem(item){
+    var count_item = $('#count-items').val();
+    var HzWrapperWidth = video_wrapper;
+    var HzAllWidth = video_block;
+    
+    if(video_block > video_wrapper){
+        if(parseInt(item) !== 0 && parseInt(item) !== 1){
+            var margin_max = (HzAllWidth-HzWrapperWidth)*-1;
+            var margin = (item - 1)*HzItemWidth*-1;
+            if(parseInt(count_item) === (parseInt(item)+1) || parseInt(margin_max) > parseInt(margin)){
+                $("#marginnow").val(margin_max);
+                $(".horizontal-video .video-slider-block").css("margin-left", margin_max + "px");
+                $("#counter").val(100);
+                $(".ui-slider-handle").css("left", "100%");
+            }
+            else{
+                $("#marginnow").val(margin);
+                $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
+
+                var percent = Math.floor(HzItemWidth*100/HzAllWidth)*2;
+                var percent_for_item = percent*((parseInt(item)-1));
+
+                $("#counter").val(percent_for_item);
+                $(".ui-slider-handle").css("left", percent_for_item + "%");
+            }
+            
+        }
+        else{
+            $("#marginnow").val(0);
+            $(".horizontal-video .video-slider-block").css("margin-left", 0 + "px");
+            $("#counter").val(0);
+            $(".ui-slider-handle").css("left", "0%");
+        }
+    }
+    if(vertical_block > vertical_wrapper){
+        if(parseInt(item) !== 0 && parseInt(item) !== 1){
+            var margin_max = (vertical_block-vertical_wrapper)*-1;
+            var margin = (item - 1)*VtItemHeight*-1;
+            if(parseInt(count_item) === (parseInt(item)+1) || parseInt(margin_max) > parseInt(margin)){
+                $("#counter-vt").val(100);
+                $("#marginnow-vt").val(margin_max);
+                $(".vertical-video .video-slider-block").css("margin-top", margin_max + "px");
+            }
+            else{
+                var percent = Math.floor(VtItemHeight*100/vertical_wrapper)*2;
+                var percent_for_item = percent*((parseInt(item)-1));
+
+                $("#counter-vt").val(100);
+                $("#marginnow-vt").val(margin);
+                $(".vertical-video .video-slider-block").css("margin-top", margin + "px");
+            }
+            
+        }
+        else{
+            $("#counter-vt").val(0);
+            $("#marginnow-vt").val(0);
+            $(".vertical-video .video-slider-block").css("margin-top", 0 + "px");
+        }
     }
 }

@@ -128,3 +128,25 @@
     background-size: auto auto;
     background-position: center top;
 }
+@media (max-width: 767px){
+    .video-slider-block{
+        height:75px;
+        width:100%;
+    }
+    .video-slider-block .video-item{
+        width:100px;
+        height:75px;
+    }
+    .video-slider-block .video-item .video-frame{
+        width:100px;
+        height:75px;
+    }
+    .video-slider-block .video-item .play-icon{
+        width:30px;
+        top:30%;
+        left:35%;
+    }
+    #button-slider-left, #button-slider-right{
+        top: 25%;
+    }
+}
