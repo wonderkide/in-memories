@@ -4,7 +4,7 @@ $('.vertical-video .video-wrapper').css("max-height","505px");
 var items = $('#count-items').val();
 var HzItemWidth = $(".horizontal-video .video-item").width();
 $(".horizontal-video .video-slider-block").width(items*HzItemWidth);
-console.log(HzItemWidth);
+//console.log(HzItemWidth);
 var video_wrapper = $('.video-wrapper.horizontal-video').width();
 var video_block = $(".horizontal-video .video-slider-block").width();
         
@@ -16,10 +16,16 @@ if(video_block <= video_wrapper){
     $('.scroll-bar').hide();
 }
 $(window).on('resize', function(){
+    HzItemWidth = $(".horizontal-video .video-item").width();
+    VtItemHeight = $(".vertical-video .video-item").height();
+    $(".horizontal-video .video-slider-block").width(items*HzItemWidth);
     video_wrapper = $('.video-wrapper.horizontal-video').width();
     video_block = $(".horizontal-video .video-slider-block").width();
     vertical_wrapper = $('.vertical-video .video-wrapper').height();
     vertical_block = $(".vertical-video .video-slider-block").height();
+    console.log(video_wrapper);
+    console.log(video_block);
+    console.log(HzItemWidth);
     if(video_block <= video_wrapper){
         $('.scroll-bar').hide();
     }
@@ -83,7 +89,7 @@ $('#button-slider-right').on("click", function(e) {
 function increment(typecount) {
     if ($("#status").val() == 3) {
         $("#status").val(typecount);
-        var numli = $('.video-wrapper.horizontal-video').width();
+        var numli = video_wrapper;
         var allwidth = $(".horizontal-video .video-slider-block").width();
         var posnow = Math.abs($('#marginnow').val());
         if (typecount == 1) {
@@ -111,7 +117,7 @@ function increment(typecount) {
         }
     } else {
         if (typecount == 3) {
-            clearInterval(interv)
+            clearInterval(interv);
             $("#status").val(3);
         }
     }
@@ -123,14 +129,14 @@ function count(intv, marginlast) {
         var t = ++d;
         $("#counter").val(t);
         $(".ui-slider-handle").css("left", t + "%");
-        var margin = Math.round(t / 100 * ($(".video-wrapper.horizontal-video").width() - $(".horizontal-video .video-slider-block").width()));
+        var margin = Math.round(t / 100 * (video_wrapper - $(".horizontal-video .video-slider-block").width()));
         $("#marginnow").val(margin);
         $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
     } else if (intv == 2 && d > 0 && l < marginlast * -1) {
         var t = --d;
         $("#counter").val(t);
         $(".ui-slider-handle").css("left", t + "%");
-        var margin = Math.round(t / 100 * ($(".video-wrapper.horizontal-video").width() - $(".horizontal-video .video-slider-block").width()));
+        var margin = Math.round(t / 100 * (video_wrapper - $(".horizontal-video .video-slider-block").width()));
         $("#marginnow").val(margin);
         $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
     } else {
@@ -141,7 +147,7 @@ function count(intv, marginlast) {
 $(".scroll-bar").slider({
     max: 100,
     slide: function( event, ui ) {
-        var margin = Math.round( ui.value / 100 * ($(".video-wrapper.horizontal-video").width() - $(".horizontal-video .video-slider-block").width()));
+        var margin = Math.round( ui.value / 100 * (video_wrapper - $(".horizontal-video .video-slider-block").width()));
         $(".horizontal-video .video-slider-block").css("margin-left", margin + "px");
         $("#counter").val(ui.value);
         $("#marginnow").val(margin);
