@@ -4,7 +4,7 @@ $('.vertical-video .video-wrapper').css("max-height","505px");
 var items = $('#count-items').val();
 var HzItemWidth = $(".horizontal-video .video-item").width();
 $(".horizontal-video .video-slider-block").width(items*HzItemWidth);
-//console.log(HzItemWidth);
+
 var video_wrapper = $('.video-wrapper.horizontal-video').width();
 var video_block = $(".horizontal-video .video-slider-block").width();
         
@@ -23,9 +23,7 @@ $(window).on('resize', function(){
     video_block = $(".horizontal-video .video-slider-block").width();
     vertical_wrapper = $('.vertical-video .video-wrapper').height();
     vertical_block = $(".vertical-video .video-slider-block").height();
-    console.log(video_wrapper);
-    console.log(video_block);
-    console.log(HzItemWidth);
+
     if(video_block <= video_wrapper){
         $('.scroll-bar').hide();
     }
